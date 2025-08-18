@@ -1,0 +1,18 @@
+name = "inext-cloudflare-template"
+main = ".wrangler/dist/index.js"
+compatibility_date = "2024-05-20" # 使用您项目生成时的日期
+
+[[d1_databases]]
+binding = "DB" # 这是在代码中访问数据库的变量名
+database_name = "ilearning_db"
+database_id = "d9de5a28-6245-4db7-80f5-bc257a6351b9" # 替换为您的 database_id
+
+[[kv_namespaces]]
+binding = "KV" # 这是在代码中访问 KV 的变量名
+id = "e4cdf862e4c542d4adb5b6662cda27d1" # 替换为您的 id
+# preview_id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" # 替换为您的 preview_id
+
+[[migrations]]
+database_name = "ilearning_db"
+directory = "migrations"
+tag = "v1"

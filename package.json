@@ -1,0 +1,53 @@
+{
+	"name": "inext-cloudflare-template",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev --turbopack",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts",
+		"db:generate": "drizzle-kit generate --config=drizzle.config.ts"
+	},
+	"dependencies": {
+		"@hookform/resolvers": "^5.2.1",
+		"@lucia-auth/adapter-drizzle": "^1.1.0",
+		"@opennextjs/cloudflare": "^1.6.5",
+		"@radix-ui/react-label": "^2.1.7",
+		"@radix-ui/react-slot": "^1.2.3",
+		"@types/bcryptjs": "^2.4.6",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"drizzle-orm": "^0.44.4",
+		"framer-motion": "^12.23.12",
+		"jose": "^6.0.12",
+		"lucia": "^3.2.2",
+		"lucide-react": "^0.539.0",
+		"next": "15.4.6",
+		"oslo": "^1.2.1",
+		"react": "19.1.0",
+		"react-dom": "19.1.0",
+		"react-hook-form": "^7.62.0",
+		"tailwind-merge": "^3.3.1",
+		"zod": "^4.0.17"
+	},
+	"devDependencies": {
+		"@eslint/eslintrc": "^3",
+		"@tailwindcss/postcss": "^4",
+		"@types/better-sqlite3": "^7.6.13",
+		"@types/node": "^20.19.10",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"better-sqlite3": "^12.2.0",
+		"drizzle-kit": "^0.31.4",
+		"eslint": "^9",
+		"eslint-config-next": "15.4.6",
+		"tailwindcss": "^4",
+		"tw-animate-css": "^1.3.6",
+		"typescript": "^5",
+		"wrangler": "^4.30.0"
+	}
+}
