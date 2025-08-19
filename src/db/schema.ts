@@ -8,7 +8,11 @@ export const usersTable = sqliteTable('users', {
   email_verified: integer('email_verified', { mode: 'boolean' }).default(false),
   username: text('username').unique(),
   display_name: text('display_name'),
+  first_name: text('first_name'),
+  last_name: text('last_name'),
+  phone: text('phone'),
   avatar_url: text('avatar_url'),
+  google_id: text('google_id').unique(), // Google用户ID
   created_at: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updated_at: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 });
@@ -43,6 +47,20 @@ export const sessionsTable = sqliteTable('sessions', {
    .references(() => usersTable.id),
   expiresAt: integer('expires_at').notNull(),
 });
+
+// 认证令牌表（用于魔法链接、密码重置等）
+export const authTokensTable = sqliteTable('auth_tokens', {
+  id: text('id').notNull().primaryKey(),
+  userId: text('user_id')
+   .notNull()
+   .references(() => usersTable.id),
+  token: text('token').notNull().unique(),
+  type: text('type').notNull(), // 'magic_link', 'password_reset', etc.
+  expires_at: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  created_at: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+});
+
+
 
 // 保留旧表结构用于向后兼容（后续可迁移）
 export const keysTable = sqliteTable('keys', {

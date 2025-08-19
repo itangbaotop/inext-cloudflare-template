@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { eq } from 'drizzle-orm';
-import { usersTable, authMethodsTable } from '@/db/schema';
+import { eq, and } from 'drizzle-orm';
+import { usersTable, authMethodsTable, emailVerificationTable } from '@/db/schema';
 import { getDb } from '@/lib/db';
 import { hashPassword } from '@/lib/crypto';
 import * as jose from 'jose';
@@ -9,16 +9,19 @@ interface RegisterRequest {
   email: string;
   password: string;
   displayName: string;
-  code: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  verificationCode: string;
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as RegisterRequest;
-    const { email, password, displayName } = body;
+    const { email, password, displayName, firstName, lastName, phone, verificationCode } = body;
 
-    if (!email || !password || !displayName) {
-      return NextResponse.json({ error: '邮箱、密码和显示名称不能为空' }, { status: 400 });
+    if (!email || !password || !displayName || !verificationCode) {
+      return NextResponse.json({ error: '邮箱、密码、显示名称和验证码不能为空' }, { status: 400 });
     }
 
     if (password.length < 8) {
@@ -26,6 +29,29 @@ export async function POST(request: NextRequest) {
     }
 
     const db = await getDb();
+
+    // 验证验证码
+    const verification = await db
+      .select()
+      .from(emailVerificationTable)
+      .where(
+        and(
+          eq(emailVerificationTable.email, email),
+          eq(emailVerificationTable.code, verificationCode),
+          eq(emailVerificationTable.used, false)
+        )
+      );
+
+    if (!verification || verification.length === 0) {
+      return NextResponse.json({ error: '验证码无效或已过期' }, { status: 400 });
+    }
+
+    const verificationRecord = verification[0];
+
+    // 检查验证码是否过期
+    if (new Date() > new Date(verificationRecord.expires_at)) {
+      return NextResponse.json({ error: '验证码已过期' }, { status: 400 });
+    }
 
     // 检查邮箱是否已注册
     const existingUser = await db.select()
@@ -50,12 +76,22 @@ export async function POST(request: NextRequest) {
     const userId = crypto.randomUUID();
     const hashedPassword = await hashPassword(password);
 
+    // 标记验证码为已使用
+    await db
+      .update(emailVerificationTable)
+      .set({ used: true })
+      .where(eq(emailVerificationTable.id, verificationRecord.id));
+
     // 创建用户
     await db.insert(usersTable).values({
       id: userId,
       email,
       username: displayName,
-      email_verified: false,
+      display_name: displayName,
+      first_name: firstName,
+      last_name: lastName,
+      phone: phone,
+      email_verified: true,
       created_at: new Date(),
       updated_at: new Date(),
     });

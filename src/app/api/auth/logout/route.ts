@@ -1,21 +1,35 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { removeAuthCookie } from '@/lib/jwt';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
-    const response = NextResponse.json({ message: '登出成功' });
+    await removeAuthCookie();
     
-    // 清除认证 cookie
-    response.cookies.set('auth_token', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/',
-      maxAge: 0, // 立即过期
+    const response = NextResponse.json({ 
+      message: 'Logged out successfully',
+      redirect: '/login'
     });
 
     return response;
+
   } catch (error) {
     console.error('Logout error:', error);
-    return NextResponse.json({ error: '登出失败' }, { status: 500 });
+    return NextResponse.json({ error: 'Logout failed' }, { status: 500 });
+  }
+}
+
+// 支持 GET 请求用于前端链接
+export async function GET(request: NextRequest) {
+  try {
+    await removeAuthCookie();
+    
+    // 重定向到登录页
+    const url = new URL('/login', request.url);
+    url.searchParams.set('logout', 'success');
+    
+    return NextResponse.redirect(url);
+  } catch (error) {
+    console.error('Logout error:', error);
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 }

@@ -1,0 +1,172 @@
+{
+  "common": {
+    "appName": "iLearning 平台",
+    "welcome": "欢迎",
+    "logout": "登出",
+    "continue": "继续",
+    "back": "返回",
+    "or": "或",
+    "loading": "加载中..."
+  },
+  "header": {
+    "logo": "iLearning",
+    "nav": {
+      "home": "首页",
+      "courses": "课程",
+      "about": "关于我们",
+      "login": "登录",
+      "register": "注册"
+    }
+  },
+  "login": {
+    "title": "欢迎回来",
+    "subtitle": "登录您的账户",
+    "email": {
+      "label": "邮箱",
+      "placeholder": "请输入您的邮箱"
+    },
+    "password": {
+      "label": "密码",
+      "placeholder": "请输入您的密码"
+    },
+    "buttons": {
+      "signIn": "登录",
+      "magicLink": "发送魔法链接",
+      "loading": "加载中...",
+      "emailLogin": "邮箱登录"
+    },
+    "links": {
+      "forgotPassword": "忘记密码？",
+      "noAccount": "还没有账户？",
+      "signUp": "立即注册"
+    },
+    "social": {
+      "google": "使用 Google 登录",
+      "github": "使用 GitHub 登录",
+      "twitter": "使用 Twitter 登录",
+      "wechat": "使用微信登录"
+    },
+    "errors": {
+      "loginFailed": "登录失败，请检查您的凭据",
+      "networkError": "网络错误，请重试",
+      "emailNotFound": "邮箱未找到，请检查或注册",
+      "emailExists": "邮箱已存在，请输入密码或使用魔法链接"
+    },
+    "magicLink": {
+      "title": "魔法链接",
+      "description": "我们将发送魔法链接到您的邮箱，无需密码即可登录",
+      "sent": "魔法链接已发送！请检查您的邮箱"
+    }
+  },
+  "register": {
+    "title": "创建新账户",
+    "subtitle": "加入我们，开始您的旅程",
+    "emailStep": {
+      "title": "邮箱验证",
+      "description": "请输入您的邮箱地址以接收验证码",
+      "emailLabel": "邮箱地址",
+      "emailPlaceholder": "name@example.com",
+      "continue": "继续",
+      "processing": "处理中...",
+      "invalidEmail": "请输入有效的邮箱地址",
+      "emailExists": "该邮箱已被注册，请直接登录",
+      "networkError": "网络错误，请重试"
+    },
+    "verifyStep": {
+      "title": "验证邮箱",
+      "description": "请输入发送到您邮箱的验证码",
+      "codeLabel": "验证码",
+      "codePlaceholder": "请输入6位验证码",
+      "verify": "验证",
+      "resend": "重新发送",
+      "resendIn": "{seconds}秒后重新发送",
+      "invalidCode": "验证码错误",
+      "codeSent": "验证码已发送到您的邮箱"
+    },
+    "detailsStep": {
+      "title": "完善信息",
+      "description": "请填写您的个人信息以完成注册",
+      "firstNameLabel": "名字",
+      "lastNameLabel": "姓氏",
+      "displayNameLabel": "显示名称",
+      "phoneLabel": "手机号码",
+      "passwordLabel": "密码",
+      "confirmPasswordLabel": "确认密码",
+      "firstNamePlaceholder": "请输入您的名字",
+      "lastNamePlaceholder": "请输入您的姓氏",
+      "displayNamePlaceholder": "您希望显示的名称",
+      "phonePlaceholder": "请输入您的手机号码",
+      "passwordPlaceholder": "至少8位，包含大小写字母和数字",
+      "confirmPasswordPlaceholder": "请再次输入密码",
+      "invalidPassword": "密码至少8位，需包含大小写字母和数字",
+      "passwordMismatch": "两次输入的密码不一致",
+      "createAccount": "完成注册"
+    },
+    "success": {
+      "title": "注册成功！",
+      "description": "即将跳转到首页..."
+    },
+    "alreadyHaveAccount": "已有账户？",
+    "login": "登录"
+  },
+  "forgotPassword": {
+    "title": "忘记密码",
+    "subtitle": "重置您的密码",
+    "emailStep": {
+      "title": "重置密码",
+      "description": "输入您的邮箱地址，我们将发送验证码给您",
+      "emailLabel": "邮箱地址",
+      "emailPlaceholder": "请输入您的邮箱",
+      "sendCode": "发送验证码",
+      "invalidEmail": "请输入有效的邮箱地址",
+      "emailNotFound": "该邮箱未注册，正在跳转到注册页面...",
+      "networkError": "网络错误，请重试"
+    },
+    "verifyStep": {
+      "title": "验证邮箱",
+      "description": "请输入发送到您邮箱的6位验证码",
+      "codeLabel": "验证码",
+      "codePlaceholder": "请输入验证码",
+      "verify": "验证",
+      "resend": "重新发送",
+      "resendIn": "{seconds}秒后重新发送",
+      "invalidCode": "验证码无效"
+    },
+    "resetStep": {
+      "title": "重置密码",
+      "description": "设置您的新密码",
+      "newPasswordLabel": "新密码",
+      "newPasswordPlaceholder": "请输入新密码",
+      "confirmPasswordLabel": "确认新密码",
+      "confirmPasswordPlaceholder": "请确认新密码",
+      "resetPassword": "重置密码",
+      "invalidPassword": "密码必须至少8位，包含大小写字母和数字",
+      "passwordMismatch": "两次输入的密码不一致",
+      "success": "密码重置成功！正在跳转到登录页面..."
+    },
+    "links": {
+      "backToLogin": "返回登录"
+    }
+  },
+  "footer": {
+    "company": {
+      "name": "iLearning 平台",
+      "description": "通过技术赋能教育。"
+    },
+    "links": {
+      "title": "快速链接",
+      "about": "关于我们",
+      "contact": "联系我们",
+      "privacy": "隐私政策",
+      "terms": "服务条款"
+    },
+    "support": {
+      "title": "支持",
+      "help": "帮助中心",
+      "faq": "常见问题",
+      "status": "系统状态"
+    },
+    "rights": "版权所有。",
+    "version": "版本"
+  }
+}

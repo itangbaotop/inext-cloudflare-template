@@ -67,6 +67,7 @@ export function ThemeProvider({
 
     setResolvedTheme(currentTheme as 'light' | 'dark');
     root.classList.add(currentTheme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme);
+    root.setAttribute(attribute, currentTheme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme);
   }, [theme, enableSystem, disableTransitionOnChange]);
 
   useEffect(() => {
