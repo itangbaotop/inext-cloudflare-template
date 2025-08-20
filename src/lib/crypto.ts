@@ -13,3 +13,11 @@ export async function verifyPassword(password: string, hashedPassword: string): 
   const hashed = await hashPassword(password);
   return hashed === hashedPassword;
 }
+
+export function generateState(): string {
+  return crypto.randomUUID();
+}
+
+export function generateCodeVerifier(): string {
+  return crypto.randomUUID();
+}

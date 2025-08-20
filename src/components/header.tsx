@@ -3,8 +3,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { LanguageSwitcher } from './language-switcher';
+import { LoginDialog } from '@/components/login-dialog';
+import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { User, Settings, LogOut, ChevronDown } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
@@ -25,7 +28,9 @@ interface HeaderProps {
 
 export function Header({ title, user }: HeaderProps) {
   const header = useTranslations('header');
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -152,17 +157,26 @@ export function Header({ title, user }: HeaderProps) {
               </div>
             ) : (
               <div className="flex items-center">
-                <Link
-                  href="/login"
+                <Button
+                  onClick={() => setShowLoginDialog(true)}
                   className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:from-blue-700 hover:to-purple-700 transition-all"
                 >
                   {header('nav.login')}
-                </Link>
+                </Button>
               </div>
             )}
           </div>
         </div>
       </div>
+      
+      <LoginDialog 
+        open={showLoginDialog} 
+        onOpenChange={setShowLoginDialog}
+        onSuccess={() => {
+          // 登录成功后刷新页面以更新用户信息
+          router.refresh();
+        }}
+      />
     </header>
   );
 }

@@ -29,6 +29,22 @@ export async function signJWT(payload: Omit<JWTPayload, 'exp'>): Promise<string>
   return jwt;
 }
 
+// 为了兼容 OAuth 回调，添加 generateJWT 函数
+export async function generateJWT(payload: { userId: string; email: string }): Promise<string> {
+  const jwt = await new SignJWT({ 
+    userId: payload.userId,
+    email: payload.email,
+    displayName: '',
+    emailVerified: false
+  })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('7d') // 7天有效期
+    .sign(secret);
+  
+  return jwt;
+}
+
 // Refresh Token (7天)
 export async function signRefreshToken(userId: string): Promise<string> {
   const refreshToken = await new SignJWT({ userId })

@@ -9,7 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { User, Shield, Bell, Link2, CreditCard } from 'lucide-react';
+import { User, Shield, Bell, Link2, CreditCard, Github } from 'lucide-react';
 
 
 
@@ -30,12 +30,8 @@ export default async function SettingsPage() {
             <p className="text-gray-600 dark:text-gray-300">管理您的账户信息和偏好设置</p>
           </div>
 
-          <Tabs defaultValue="profile" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5">
-              <TabsTrigger value="profile" className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                个人信息
-              </TabsTrigger>
+          <Tabs defaultValue="security" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4">
               <TabsTrigger value="security" className="flex items-center gap-2">
                 <Shield className="w-4 h-4" />
                 安全设置
@@ -54,50 +50,7 @@ export default async function SettingsPage() {
               </TabsTrigger>
             </TabsList>
 
-            {/* 个人信息标签页 */}
-            <TabsContent value="profile">
-              <div className="grid gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>基本信息</CardTitle>
-                    <CardDescription>更新您的个人信息</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center space-x-4">
-                      <div className="relative w-20 h-20">
-                        {user.avatarUrl ? (
-                          <Image
-                            src={user.avatarUrl}
-                            alt={user.displayName}
-                            fill
-                            className="rounded-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                            <User className="w-10 h-10 text-white" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="displayName">显示名称</Label>
-                        <Input id="displayName" defaultValue={user.displayName} />
-                      </div>
-                      <div>
-                        <Label htmlFor="email">邮箱地址</Label>
-                        <Input id="email" type="email" defaultValue={user.email} disabled={user.googleId !== null} />
-                      </div>
-                    </div>
-                    <div>
-                      <Label htmlFor="bio">个人简介</Label>
-                      <Input id="bio" placeholder="介绍一下自己..." />
-                    </div>
-                    <Button>保存更改</Button>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
+
 
             {/* 安全设置标签页 */}
             <TabsContent value="security">
@@ -108,7 +61,13 @@ export default async function SettingsPage() {
                     <CardDescription>管理您的账户密码</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {!user.googleId && (
+                    {user.provider === 'github' && (
+                      <p className="text-sm text-gray-600">您使用GitHub账户登录，无需设置密码</p>
+                    )}
+                    {user.provider === 'google' && (
+                      <p className="text-sm text-gray-600">您使用Google账户登录，无需设置密码</p>
+                    )}
+                    {!user.provider && (
                       <>
                         <div>
                           <Label htmlFor="currentPassword">当前密码</Label>
@@ -124,9 +83,6 @@ export default async function SettingsPage() {
                         </div>
                         <Button>更改密码</Button>
                       </>
-                    )}
-                    {user.googleId && (
-                      <p className="text-sm text-gray-600">您使用Google账户登录，无需设置密码</p>
                     )}
                   </CardContent>
                 </Card>
@@ -197,22 +153,42 @@ export default async function SettingsPage() {
                     <CardDescription>管理您的第三方账户连接</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                          <span className="text-white font-bold text-sm">G</span>
+                    {user.provider === 'google' && (
+                      <div className="flex items-center justify-between p-4 border rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                            <span className="text-white font-bold text-sm">G</span>
+                          </div>
+                          <div>
+                            <p className="font-medium">Google</p>
+                            <p className="text-sm text-gray-600">
+                              {user.googleId ? '已连接' : '未连接'}
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-medium">Google</p>
-                          <p className="text-sm text-gray-600">
-                            {user.googleId ? '已连接' : '未连接'}
-                          </p>
-                        </div>
+                        <Button variant={user.googleId ? "outline" : "default"}>
+                          {user.googleId ? '断开连接' : '连接'}
+                        </Button>
                       </div>
-                      <Button variant={user.googleId ? "outline" : "default"}>
-                        {user.googleId ? '断开连接' : '连接'}
-                      </Button>
-                    </div>
+                    )}
+                    {user.provider === 'github' && (
+                      <div className="flex items-center justify-between p-4 border rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                            <Github className="w-5 h-5 text-white" />
+                          </div>
+                          <div>
+                            <p className="font-medium">GitHub</p>
+                            <p className="text-sm text-gray-600">
+                              {user.githubId ? '已连接' : '未连接'}
+                            </p>
+                          </div>
+                        </div>
+                        <Button variant={user.githubId ? "outline" : "default"}>
+                          {user.githubId ? '断开连接' : '连接'}
+                        </Button>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </div>
