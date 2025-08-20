@@ -9,7 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { User, Shield, Bell, Link2, Palette, CreditCard } from 'lucide-react';
+import { User, Shield, Bell, Link2, CreditCard } from 'lucide-react';
 
 
 
@@ -31,7 +31,7 @@ export default async function SettingsPage() {
           </div>
 
           <Tabs defaultValue="profile" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2 lg:grid-cols-6">
+            <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5">
               <TabsTrigger value="profile" className="flex items-center gap-2">
                 <User className="w-4 h-4" />
                 个人信息
@@ -47,10 +47,6 @@ export default async function SettingsPage() {
               <TabsTrigger value="social" className="flex items-center gap-2">
                 <Link2 className="w-4 h-4" />
                 社交账户
-              </TabsTrigger>
-              <TabsTrigger value="appearance" className="flex items-center gap-2">
-                <Palette className="w-4 h-4" />
-                界面偏好
               </TabsTrigger>
               <TabsTrigger value="billing" className="flex items-center gap-2">
                 <CreditCard className="w-4 h-4" />
@@ -257,20 +253,7 @@ export default async function SettingsPage() {
               </div>
             </TabsContent>
 
-            {/* 界面偏好标签页 */}
-            <TabsContent value="appearance">
-              <div className="grid gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>主题设置</CardTitle>
-                    <CardDescription>选择您喜欢的界面主题</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <ThemeToggle />
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
+
           </Tabs>
         </div>
       </div>

@@ -5,8 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { User, Shield, LogOut } from 'lucide-react';
-
-
+import { getCurrentUser } from '@/lib/auth';
 
 export default async function ProfilePage() {
   const user = await getCurrentUser();
