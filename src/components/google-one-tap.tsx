@@ -22,8 +22,6 @@ export function GoogleOneTap({ className }: GoogleOneTapProps) {
   // 1. 定义回调函数，处理登录成功后的逻辑
   // 使用 useCallback 确保函数引用稳定
   const handleCredentialResponse = useCallback(async (response: { credential: string }) => {
-    console.log('✅ Google One Tap 登录成功，收到凭据:', response);
-    
     // 这里是您原来的 fetch 逻辑，保持不变
     try {
       const res = await fetch('/api/auth/google-gis', {
@@ -41,11 +39,9 @@ export function GoogleOneTap({ className }: GoogleOneTapProps) {
         // 成功后重定向
         window.location.href = data.redirectTo || '/';
       } else {
-        console.error('后端验证失败:', data.error);
         alert(data.error || 'Google登录失败，请重试');
       }
     } catch (error) {
-      console.error('❌ 登录过程出错:', error);
       alert('Google登录失败: ' + ((error as Error).message || '网络错误'));
     }
   }, []);
@@ -60,7 +56,6 @@ export function GoogleOneTap({ className }: GoogleOneTapProps) {
 
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
     if (!clientId) {
-      console.error('❌ 环境变量 NEXT_PUBLIC_GOOGLE_CLIENT_ID 未设置!');
       return;
     }
 
@@ -81,19 +76,17 @@ export function GoogleOneTap({ className }: GoogleOneTapProps) {
     // 关键：在脚本加载完成后再执行初始化
     script.onload = initializeGoogle;
     script.onerror = () => {
-        console.error('❌ Google GSI 脚本加载失败。');
+        // 可以在这里设置显示备用登录按钮的状态
     };
     document.head.appendChild(script);
 
     function initializeGoogle() {
         if (!window.google || !window.google.accounts || !window.google.accounts.id) {
-            console.error('❌ Google API 对象在脚本加载后仍然不可用。');
             // 可以在这里设置显示备用登录按钮的状态
             return;
         }
 
         try {
-            console.log('🔧 正在初始化 Google One Tap...');
             window.google.accounts.id.initialize({
                 client_id: clientId,
                 callback: handleCredentialResponse,
@@ -101,20 +94,18 @@ export function GoogleOneTap({ className }: GoogleOneTapProps) {
                 cancel_on_tap_outside: true,
             });
 
-            console.log('✅ Google One Tap 初始化成功。');
-
             // 显示一键登录提示
             window.google.accounts.id.prompt((notification: any) => {
                 if (notification.isNotDisplayed()) {
-                    console.warn('⚠️ One Tap 未显示，原因:', notification.getNotDisplayedReason());
+                    // 静默处理
                 } else if (notification.isSkippedMoment()) {
-                    console.warn('⏭️ One Tap 被跳过，原因:', notification.getSkippedReason());
+                    // 静默处理
                 } else {
-                    console.log('👍 One Tap 已成功显示。');
+                    // 成功显示
                 }
             });
         } catch (error) {
-            console.error('❌ 在 initialize 调用中捕获到错误:', error);
+            // 静默处理错误
         }
     }
 

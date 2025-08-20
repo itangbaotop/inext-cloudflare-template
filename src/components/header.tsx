@@ -7,10 +7,12 @@ import { useRouter } from 'next/navigation';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { LanguageSwitcher } from './language-switcher';
 import { LoginDialog } from '@/components/login-dialog';
+import { MobileMenu } from '@/components/mobile-menu';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import { User, Settings, LogOut, ChevronDown } from 'lucide-react';
+import { User, Settings, LogOut, ChevronDown, Crown, Star } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { useSubscription } from '@/lib/subscription';
 
 interface UserInfo {
   id: string;
@@ -28,10 +30,12 @@ interface HeaderProps {
 
 export function Header({ title, user }: HeaderProps) {
   const header = useTranslations('header');
+  const subscriptionT = useTranslations('subscription');
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { subscription } = useSubscription();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -53,6 +57,35 @@ export function Header({ title, user }: HeaderProps) {
     } catch (error) {
       console.error('Logout failed:', error);
     }
+  };
+
+  const getMembershipBadge = () => {
+    if (!subscription) return null;
+
+    const planMap = {
+      free: {
+        icon: <Star className="w-4 h-4" />,
+        label: subscriptionT('plans.free.name'),
+        color: 'text-gray-600'
+      },
+      basic: {
+        icon: <Crown className="w-4 h-4" />,
+        label: subscriptionT('plans.plus.name'),
+        color: 'text-purple-600'
+      },
+      pro: {
+        icon: <Crown className="w-4 h-4" />,
+        label: subscriptionT('plans.plus.name'),
+        color: 'text-blue-600'
+      },
+      premium: {
+        icon: <Crown className="w-4 h-4" />,
+        label: subscriptionT('plans.enterprise.name'),
+        color: 'text-yellow-600'
+      }
+    };
+
+    return planMap[subscription.plan] || planMap.free;
   };
 
   return (
@@ -81,6 +114,13 @@ export function Header({ title, user }: HeaderProps) {
               {header('nav.courses')}
             </Link>
             <Link 
+              href="/subscription/pricing" 
+              className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 px-3 py-2 text-sm font-medium transition-colors flex items-center space-x-1"
+            >
+              <Crown className="w-4 h-4" />
+              <span>{header('nav.subscription')}</span>
+            </Link>
+            <Link 
               href="/about" 
               className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 text-sm font-medium transition-colors"
             >
@@ -90,8 +130,10 @@ export function Header({ title, user }: HeaderProps) {
 
           {/* Right side */}
           <div className="flex items-center space-x-4">
-            <LanguageSwitcher />
-            <ThemeToggle />
+            <div className="hidden md:flex items-center space-x-4">
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
             
             {user ? (
               <div className="relative" ref={menuRef}>
@@ -112,9 +154,17 @@ export function Header({ title, user }: HeaderProps) {
                       <User className="w-4 h-4 text-white" />
                     </div>
                   )}
-                  <span className="hidden md:block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {user.displayName}
-                  </span>
+                  <div className="hidden md:block text-left">
+                    <span className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      {user.displayName}
+                    </span>
+                    <div className="flex items-center space-x-1">
+                      {getMembershipBadge()?.icon}
+                      <span className={`text-xs ${getMembershipBadge()?.color}`}>
+                        {getMembershipBadge()?.label}
+                      </span>
+                    </div>
+                  </div>
                   <ChevronDown className={`w-4 h-4 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
 
@@ -134,6 +184,14 @@ export function Header({ title, user }: HeaderProps) {
                       个人资料
                     </Link>
                     
+                    <Link
+                      href="/subscription"
+                      className="flex items-center px-4 py-2 text-sm text-purple-600 dark:text-purple-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Crown className="w-4 h-4 mr-3" />
+                      订阅管理
+                    </Link>
                     <Link
                       href="/settings"
                       className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -156,13 +214,16 @@ export function Header({ title, user }: HeaderProps) {
                 )}
               </div>
             ) : (
-              <div className="flex items-center">
-                <Button
-                  onClick={() => setShowLoginDialog(true)}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:from-blue-700 hover:to-purple-700 transition-all"
-                >
-                  {header('nav.login')}
-                </Button>
+              <div className="flex items-center space-x-2">
+                <div className="hidden md:flex items-center">
+                  <Button
+                    onClick={() => setShowLoginDialog(true)}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:from-blue-700 hover:to-purple-700 transition-all"
+                  >
+                    {header('nav.login')}
+                  </Button>
+                </div>
+                <MobileMenu user={user} onLogout={handleLogout} />
               </div>
             )}
           </div>

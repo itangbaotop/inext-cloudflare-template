@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { User, Shield, LogOut } from 'lucide-react';
 import { getCurrentUser } from '@/lib/auth';
+import { CreditCard, Crown } from 'lucide-react';
+import { getSubscriptionStatus } from '@/lib/stripe';
 
 export default async function ProfilePage() {
   const user = await getCurrentUser();
@@ -13,6 +15,9 @@ export default async function ProfilePage() {
   if (!user) {
     redirect('/login');
   }
+
+  // 获取订阅状态
+  const subscription = await getSubscriptionStatus(user.id);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -52,6 +57,26 @@ export default async function ProfilePage() {
                 </CardHeader>
                 <CardContent className="pt-6">
                   <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">订阅状态</span>
+                      <div className="flex items-center gap-2">
+                        <Crown className="w-4 h-4 text-purple-600" />
+                        <span className="text-sm font-medium text-purple-600">
+                          {subscription?.plan === 'free' ? '免费版' :
+                           subscription?.plan === 'basic' ? '基础版' :
+                           subscription?.plan === 'pro' ? '专业版' :
+                           subscription?.plan === 'premium' ? '高级版' : '免费版'}
+                        </span>
+                      </div>
+                    </div>
+                    {subscription?.status !== 'free' && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">到期时间</span>
+                        <span className="text-sm font-medium text-gray-900">
+                          {subscription?.currentPeriodEnd?.toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">邮箱验证</span>
                       <span className={`text-sm font-medium ${
@@ -111,6 +136,48 @@ export default async function ProfilePage() {
                   </CardContent>
                 </Card>
 
+                {/* 订阅管理卡片 */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <CreditCard className="w-5 h-5" />
+                      订阅管理
+                    </CardTitle>
+                    <CardDescription>
+                      查看和管理您的订阅计划
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div>
+                          <p className="font-medium">
+                            当前计划: {subscription?.plan === 'free' ? '免费版' :
+                            subscription?.plan === 'basic' ? '基础版' :
+                            subscription?.plan === 'pro' ? '专业版' :
+                            subscription?.plan === 'premium' ? '高级版' : '免费版'}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            状态: {subscription?.status === 'active' ? '活跃' :
+                            subscription?.status === 'canceled' ? '已取消' :
+                            subscription?.status === 'past_due' ? '过期' : '未知'}
+                          </p>
+                        </div>
+                        <Button asChild>
+                          <Link href="/subscription">
+                            管理订阅
+                          </Link>
+                        </Button>
+                      </div>
+                      {subscription?.status === 'active' && subscription.plan !== 'free' && (
+                        <div className="text-sm text-gray-600">
+                          下次续费时间: {subscription.currentPeriodEnd?.toLocaleDateString()}
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+
                 {/* 安全设置 */}
                 <Card>
                   <CardHeader>
@@ -138,7 +205,6 @@ export default async function ProfilePage() {
                         {user.emailVerified ? '已验证' : '验证邮箱'}
                       </Button>
                     </div>
-
                   </CardContent>
                 </Card>
 

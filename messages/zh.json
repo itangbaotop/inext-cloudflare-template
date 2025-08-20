@@ -13,6 +13,7 @@
     "nav": {
       "home": "首页",
       "courses": "课程",
+      "subscription": "订阅",
       "about": "关于我们",
       "login": "登录",
       "register": "注册"
@@ -167,5 +168,98 @@
     },
     "rights": "版权所有。",
     "version": "版本"
+  },
+  "subscription": {
+    "title": "选择最适合您的订阅计划",
+    "subtitle": "从免费版到企业版，总有一个计划适合您的需求",
+    "getStarted": "开始使用",
+    "subscribeNow": "立即订阅",
+    "currentPlan": "当前计划",
+    "contactSupport": "有疑问？联系我们的客服团队获取帮助",
+    "manage": {
+      "title": "订阅管理",
+      "subtitle": "管理您的订阅计划和支付方式",
+      "currentSubscription": "当前订阅",
+      "plan": "套餐",
+      "price": "价格",
+      "billingDate": "续费日期",
+      "status": {
+        "active": "活跃",
+        "canceled": "已取消",
+        "expired": "已过期"
+      },
+      "actions": {
+        "upgrade": "升级套餐",
+        "change": "更改套餐",
+        "cancel": "取消订阅",
+        "reactivate": "重新激活",
+        "processing": "处理中..."
+      },
+      "paymentMethod": "支付方式",
+      "managePayment": "管理支付方式",
+      "billingHistory": "账单历史",
+      "downloadInvoice": "下载发票",
+      "noInvoices": "暂无账单记录",
+      "usingFree": "您当前使用的是免费版",
+      "upgradeNow": "升级到付费套餐",
+      "cancelConfirmation": "确定要取消订阅吗？您可以在当前付费周期结束前继续使用服务。",
+      "cancelSuccess": "订阅已取消，将在当前周期结束后停止",
+      "reactivateSuccess": "订阅已重新激活",
+      "viewAll": "查看全部"
+    },
+    "plans": {
+      "free": {
+        "name": "免费版",
+        "price": "0",
+        "description": "适合个人学习和基础使用",
+        "features": [
+          "基础课程访问",
+          "每月5次AI辅导",
+          "基础进度跟踪",
+          "社区支持"
+        ],
+        "badge": "免费开始"
+      },
+      "plus": {
+        "name": "Plus版",
+        "price": "29",
+        "description": "适合进阶学习和专业发展",
+        "badge": "最受欢迎",
+        "features": [
+          "全部课程访问",
+          "每月50次AI辅导",
+          "高级进度分析",
+          "优先客服支持",
+          "离线学习",
+          "证书认证"
+        ]
+      },
+      "enterprise": {
+        "name": "企业版",
+        "price": "99",
+        "description": "适合团队和企业培训",
+        "features": [
+          "无限制课程访问",
+          "无限制AI辅导",
+          "团队管理功能",
+          "专属客服支持",
+          "企业培训方案",
+          "API访问",
+          "白标解决方案",
+          "SSO集成"
+        ]
+      }
+    },
+    "pricing": {
+      "monthly": "按月付费",
+      "yearly": "按年付费",
+      "save17": "省17%",
+      "billedMonthly": "每月计费",
+      "billedYearly": "每年计费",
+      "freeTrial": "免费试用",
+      "popular": "最受欢迎",
+      "questions": "常见问题",
+      "contactSupport": "联系客服"
+    }
   }
 }

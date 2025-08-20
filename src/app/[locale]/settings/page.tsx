@@ -9,6 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { SubscriptionManagerEnhanced } from '@/components/subscription-manager-enhanced';
 import { User, Shield, Bell, Link2, CreditCard, Github } from 'lucide-react';
 
 
@@ -196,37 +197,7 @@ export default async function SettingsPage() {
 
             {/* 订阅与支付标签页 */}
             <TabsContent value="billing">
-              <div className="grid gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>订阅管理</CardTitle>
-                    <CardDescription>管理您的订阅计划</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium">当前计划</p>
-                        <p className="text-sm text-gray-600">免费版</p>
-                      </div>
-                      <Button variant="outline">升级计划</Button>
-                    </div>
-                    <Separator />
-                    <div>
-                      <p className="text-sm text-gray-600 mb-2">订阅功能即将推出</p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>支付历史</CardTitle>
-                    <CardDescription>查看您的支付记录</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-gray-600">暂无支付记录</p>
-                  </CardContent>
-                </Card>
-              </div>
+              <SubscriptionManagerEnhanced />
             </TabsContent>
 
 

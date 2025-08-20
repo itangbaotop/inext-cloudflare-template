@@ -13,6 +13,14 @@ export const usersTable = sqliteTable('users', {
   phone: text('phone'),
   avatar_url: text('avatar_url'),
   google_id: text('google_id').unique(), // Google用户ID
+  
+  // Stripe 相关字段
+  stripe_customer_id: text('stripe_customer_id').unique(),
+  stripe_subscription_id: text('stripe_subscription_id').unique(),
+  subscription_status: text('subscription_status').default('inactive'), // active, inactive, canceled, past_due
+  subscription_end_date: integer('subscription_end_date', { mode: 'timestamp' }),
+  subscription_plan: text('subscription_plan').default('free'), // free, basic, pro, premium
+  
   created_at: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updated_at: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 });

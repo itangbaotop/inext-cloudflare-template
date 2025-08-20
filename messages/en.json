@@ -13,6 +13,7 @@
     "nav": {
       "home": "Home",
       "courses": "Courses",
+      "subscription": "Subscription",
       "about": "About",
       "login": "Login",
       "register": "Register"
@@ -174,5 +175,54 @@
     },
     "rights": "All rights reserved.",
     "version": "Version"
+  },
+  "subscription": {
+    "title": "Choose the Right Plan for You",
+    "subtitle": "From free to enterprise, find the perfect plan for your needs",
+    "getStarted": "Get Started",
+    "subscribeNow": "Subscribe Now",
+    "currentPlan": "Current Plan",
+    "contactSupport": "Questions? Contact our support team for help",
+    "plans": {
+      "free": {
+        "name": "Free",
+        "price": "0",
+        "description": "Perfect for personal learning and basic usage",
+        "features": [
+          "Basic course access",
+          "5 AI tutoring sessions per month",
+          "Basic progress tracking",
+          "Community support"
+        ]
+      },
+      "plus": {
+        "name": "Plus",
+        "price": "29",
+        "description": "Great for advanced learning and professional development",
+        "features": [
+          "Full course access",
+          "50 AI tutoring sessions per month",
+          "Advanced progress analytics",
+          "Priority customer support",
+          "Offline learning",
+          "Certificate authentication"
+        ]
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "price": "99",
+        "description": "Perfect for teams and corporate training",
+        "features": [
+          "Unlimited course access",
+          "Unlimited AI tutoring",
+          "Team management features",
+          "Dedicated customer support",
+          "Corporate training solutions",
+          "API access",
+          "White-label solutions",
+          "SSO integration"
+        ]
+      }
+    }
   }
 }
