@@ -165,6 +165,36 @@ export function LoginDialog({ open, onOpenChange, onSuccess, redirectTo = '/' }:
     }
   };
 
+  // 微信登录处理
+  const handleWeChatLogin = async () => {
+    try {
+      setIsLoading(true);
+      setError('');
+      
+      const response = await fetch('/api/auth/wechat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          redirectUri: '/api/auth/wechat',
+        }),
+      });
+
+      if (response.ok) {
+        const { url } = await response.json();
+        handleOpenChange(false);
+        window.location.href = url;
+      } else {
+        setError('微信登录初始化失败，请重试');
+      }
+    } catch (error) {
+      setError('网络错误，请重试');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // 社交登录按钮组件
   const SocialLoginButtons = () => (
     <div className="space-y-3">
@@ -179,11 +209,12 @@ export function LoginDialog({ open, onOpenChange, onSuccess, redirectTo = '/' }:
         <Button 
           variant="outline" 
           className="w-full"
-          onClick={() => {
-            handleOpenChange(false);
-            window.location.href = `/${locale}/api/auth/wechat`;
-          }}
+          onClick={handleWeChatLogin}
+          disabled={isLoading}
         >
+          <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.13 2 11.5c0 2.38 1.19 4.47 3 5.74V20l2.77-1.52C9.38 18.63 10.64 19 12 19c5.52 0 10-4.13 10-9.5S17.52 2 12 2zm4.5 8.5h-1v1c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-1h-1c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h1v-1c0-.28.22-.5.5-.5s.5.22.5.5v1h1c.28 0 .5.22.5.5s-.22.5-.5.5zm-4 0H8c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h4.5c.28 0 .5.22.5.5s-.22.5-.5.5z"/>
+          </svg>
           {t('social.wechat')}
         </Button>
       )}
