@@ -5,7 +5,7 @@ import { getDb } from '@/lib/db';
 import { usersTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { google } from '@/lib/auth';
-import { signJWT, setAuthCookie } from '@/lib/jwt';
+import { signJWT, setAuthCookie, createSession } from '@/lib/jwt';
 
 interface GoogleUser {
   sub: string;
@@ -85,6 +85,9 @@ export async function GET(request: NextRequest): Promise<Response> {
 
     const token = await signJWT(jwtPayload);
     await setAuthCookie(token);
+    
+    // 创建refresh token会话
+    await createSession(userId);
     
     const response = NextResponse.redirect(new URL('/', request.url));
     

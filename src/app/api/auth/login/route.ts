@@ -3,7 +3,7 @@ import { eq, and } from 'drizzle-orm';
 import { usersTable, authMethodsTable } from '@/db/schema';
 import { getDb } from '@/lib/db';
 import { verifyPassword } from '@/lib/crypto';
-import * as jose from 'jose';
+import { signJWT, setAuthCookie, createSession } from '@/lib/jwt';
 
 interface LoginRequest {
   email: string;
@@ -60,21 +60,16 @@ export async function POST(request: NextRequest) {
     }
 
     // 生成JWT token
-    const secret = process.env.JWT_SECRET;
-    if (!secret) {
-      throw new Error('JWT_SECRET is not defined');
-    }
-
-    const secretKey = new TextEncoder().encode(secret);
-    const token = await new jose.SignJWT({ 
+    const token = await signJWT({ 
       userId: userData.id,
       email: userData.email,
-      username: userData.username,
-    })
-      .setProtectedHeader({ alg: 'HS256' })
-      .setExpirationTime('24h')
-      .setIssuedAt()
-      .sign(secretKey);
+      displayName: userData.username || userData.display_name || '未设置名称',
+      avatarUrl: userData.avatar_url,
+      emailVerified: Boolean(userData.email_verified),
+    });
+
+    // 创建refresh token会话
+    await createSession(userData.id);
 
     // 创建响应并设置cookie
     const response = NextResponse.json({ 
@@ -86,13 +81,7 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    response.cookies.set('auth_token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24, // 24小时
-      path: '/',
-    });
+    await setAuthCookie(token);
 
     return response;
   } catch (error) {

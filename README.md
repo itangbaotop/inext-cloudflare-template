@@ -36,5 +36,9 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 
--[ ] jwt刷新时间设置为15分钟
--[ ] jwt刷新时间设置为15分钟
+-[x] jwt刷新时间设置为15分钟
+- [x] 实现refresh token机制，避免用户频繁重新登录
+  - Access Token: 15分钟有效期
+  - Refresh Token: 7天有效期
+  - 自动刷新机制：token即将过期时自动刷新
+  - 静默刷新：无需用户操作即可获取新token

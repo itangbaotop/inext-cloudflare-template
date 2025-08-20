@@ -50,7 +50,7 @@ export async function middleware(request: NextRequest) {
     // 2. JWT验证功能（仅适用于API路由）
     if (pathname.startsWith('/api/')) {
         // 如果是认证相关的API路由，直接跳过国际化处理
-        if (pathname.startsWith('/api/auth/')) {
+        if (pathname.startsWith('/api/auth/') && pathname !== '/api/auth/refresh') {
             return NextResponse.next();
         }
 
